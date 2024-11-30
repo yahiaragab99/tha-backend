@@ -28,6 +28,9 @@ export class User extends BaseEntity {
   @Column({ type: "varchar", length: 20, nullable: true, name: "phone_number" })
   phoneNumber: string;
 
+  @Column({ type: "varchar", length: 500, nullable: true, name: "profile_pic_url" })
+  profilePicUrl: string; // New field for the profile picture URL
+
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
 

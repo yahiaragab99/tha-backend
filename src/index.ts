@@ -75,8 +75,8 @@ const main = async () => {
   app.use(express.json());
 
   // Mount QR code routes under "/qrCode"
-  app.use("/qrCode", qrCodeRouter);
-  app.use("/user", userRouter);
+  app.use("/qr-code", qrCodeRouter);
+  app.use("/auth", userRouter);
 
   // Default route to check if the server is running
   app.get("/", (_req: Request, res: Response) => {

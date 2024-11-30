@@ -12,7 +12,7 @@ const qrCodeRouter = express.Router();
 qrCodeRouter.get("/user-qrs/:userId", getQrCodesByUserId);
 qrCodeRouter.get("/code/:qrCodeCode", getQrCodeByCode);
 qrCodeRouter.get("/id/:qrCodeId", getQrCodeById);
-qrCodeRouter.get("/isClaimed/:qrCodeId", isQrCodeClaimed);
+qrCodeRouter.get("/is-claimed/:qrCodeId", isQrCodeClaimed);
 qrCodeRouter.put("/claim/:qrCodeCode", updateQrCode);
 
 export default qrCodeRouter;
