@@ -241,20 +241,3 @@ export const deleteQrCode = async (
     next(); // Ensure next middleware is called
   }
 };
-
-export const getItemCategories = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<any> => {
-  try {
-    const categories = await ItemCategory.find();
-    console.log("CATEGORIES", categories);
-    if (!categories) return res.status(404).json({ message: "Item categories not found" });
-    res.status(200).json(categories);
-  } catch (error) {
-    console.error("Error getting QR code", error);
-    res.status(500).json({ message: "Internal server error" });
-  } finally {
-  }
-};

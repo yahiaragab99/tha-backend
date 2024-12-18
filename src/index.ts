@@ -105,8 +105,8 @@ const main = async () => {
   // Middleware to parse JSON request bodies
   app.use(express.json());
 
-  // Mount QR code routes under "/qrCode"
-  app.use("/qr-code", qrCodeRouter);
+  // Mount QR code routes under "/qrcode"
+  app.use("/qrcode", qrCodeRouter);
   app.use("/auth", userRouter);
 
   // Default route to check if the server is running
