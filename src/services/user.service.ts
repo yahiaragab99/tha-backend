@@ -1,9 +1,8 @@
 import { User } from "../entities/users.entity";
-import bcrypt from "bcrypt";
 import { logger } from "../utils/logger";
-import { JWT_EXPIRATION } from "../constants";
 import jwt from "jsonwebtoken";
 import bucket from "../storage";
+import { comparePasswords, createJwt, hashPassword } from "../utils/auth";
 
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
 interface JwtPayload {
@@ -30,14 +29,8 @@ export const createUserService = async (
 ): Promise<{ success: boolean; message: string; token?: string }> => {
   try {
     const existingUser = await isEmailRegisteredService(email);
-    if (existingUser) {
-      return { success: false, message: "Email already exists" };
-    }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new user
+    if (existingUser) return { success: false, message: "Email already exists" };
+    const hashedPassword = await hashPassword(password);
     const newUser = User.create({
       email,
       passwordHash: hashedPassword,
@@ -46,18 +39,11 @@ export const createUserService = async (
       phoneNumber,
     });
     await newUser.save();
-
     logger.info(`New user created: ${newUser}`);
-
-    // Ensure the JWT_SECRET is defined
     if (!JWT_SECRET) {
       return { success: false, message: "Internal server error" };
     }
-
-    // Generate a JWT token for the new user
-    const token = jwt.sign({ id: newUser.id, email: newUser.email }, JWT_SECRET, {
-      expiresIn: JWT_EXPIRATION,
-    });
+    const token = createJwt(newUser);
     return { success: true, message: "User created successfully", token };
   } catch (err) {
     return { success: false, message: "Internal server error" };
@@ -73,16 +59,11 @@ export const logInUserService = async (
     if (!user) {
       return { success: false, message: "User not found" };
     }
-
-    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+    const isPasswordValid = await comparePasswords(password, user.passwordHash);
     if (!isPasswordValid) {
       return { success: false, message: "Invalid password" };
     }
-
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET!, {
-      expiresIn: JWT_EXPIRATION,
-    });
-
+    const token = createJwt(user);
     return {
       success: true,
       message: "Login successful",

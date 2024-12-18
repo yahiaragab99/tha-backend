@@ -24,6 +24,9 @@ export class QrCode extends BaseEntity {
   @JoinColumn({ name: "user_id" })
   user: User;
 
+  @Column({ type: "uuid", name: "qr_code_type_id", nullable: false })
+  qrCodeTypeId: string;
+
   @ManyToOne(() => QrCodeType)
   @JoinColumn({ name: "qr_code_type_id" })
   qrCodeType: QrCodeType;
@@ -37,8 +40,12 @@ export class QrCode extends BaseEntity {
   @Column({ type: "text", nullable: true, name: "item_details" })
   itemDetails: string;
 
+  // Instead of storing the whole ItemCategory object, store just the ID
+  @Column({ type: "uuid", name: "item_category_id", nullable: false })
+  itemCategoryId: string;
+
   @ManyToOne(() => ItemCategory)
-  @JoinColumn({ name: "item_category" })
+  @JoinColumn({ name: "item_category_id" })
   itemCategory: ItemCategory;
 
   @Column({ type: "boolean", name: "is_claimed", default: false })
