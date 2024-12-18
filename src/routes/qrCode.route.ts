@@ -5,7 +5,9 @@ import {
   getQrCodeById,
   getQrCodesByUserId,
   isQrCodeClaimed,
-} from "../controllers/qrCode.controller";
+  deleteQrCode,
+  getItemCategories,
+} from "../controllers/qrcode.controller";
 
 const qrCodeRouter = express.Router();
 
@@ -14,5 +16,7 @@ qrCodeRouter.get("/code/:qrCodeCode", getQrCodeByCode);
 qrCodeRouter.get("/id/:qrCodeId", getQrCodeById);
 qrCodeRouter.get("/is-claimed/:qrCodeId", isQrCodeClaimed);
 qrCodeRouter.put("/claim/:qrCodeCode", updateQrCode);
+qrCodeRouter.delete("/delete/:qrCodeId", deleteQrCode);
+qrCodeRouter.get("/categories", getItemCategories);
 
 export default qrCodeRouter;

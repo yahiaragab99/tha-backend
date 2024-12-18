@@ -7,16 +7,19 @@ import {
   updateUser,
   logOutUser,
 } from "../controllers/user.controller";
-import upload from "../multer";
-import multerUpload from "../multer";
+import { validateSignUp } from "../middleware/validation.middleware";
 
 const userRouter = express.Router();
 
-userRouter.post("/is-email-registered", isEmailRegistered);
-userRouter.post("/sign-up", signUpUser);
-userRouter.post("/update-user", multerUpload.single("profilePicUrl"), updateUser);
-userRouter.post("/log-in", logInUser);
-userRouter.post("/log-out", logOutUser);
-userRouter.get("/get-user/:userId", getUser);
+/*
+  Auth routes
+*/
+userRouter.post("/signup", validateSignUp, signUpUser);
+userRouter.post("/login", logInUser);
+userRouter.post("/logout", logOutUser);
+
+userRouter.put("/user/:id", updateUser);
+userRouter.get("/user/:id", getUser);
+userRouter.post("/isemailregistered/:email", isEmailRegistered);
 
 export default userRouter;

@@ -13,7 +13,7 @@ export class ItemCategory extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", length: 255, name: "category_name" })
   categoryName: string;
 
   @CreateDateColumn({ name: "created_at" })
