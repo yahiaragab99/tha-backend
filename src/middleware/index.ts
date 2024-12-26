@@ -27,17 +27,11 @@ export const configureMiddleware = (app: Express) => {
   app.use(
     cors({
       origin: [process.env.CLIENT_URI!, process.env.IOS_CLIENT_URI!],
-      methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+      methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],
       credentials: true,
     })
   );
   app.use(session(sessionConfig));
   app.use(bodyParser.json());
   app.use(express.json());
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, PATCH, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    next();
-  });
 };

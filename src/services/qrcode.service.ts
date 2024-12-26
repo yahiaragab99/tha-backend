@@ -8,7 +8,7 @@ export const getUserQrCodesService = async (
     const userQrCodes = await QrCode.find({
       where: { user_id: userId },
     });
-    logger.info("User QR codes:", userQrCodes);
+    // logger.info({ userQrCodes });
     if (!userQrCodes || userQrCodes.length === 0)
       return { success: false, message: "No QR codes found for the user" };
     return { success: true, message: "User QR codes found", qrCodes: userQrCodes };
@@ -45,20 +45,26 @@ export const getQrCodeByIdService = async (
 };
 
 export const updateQrCodeService = async (
-  id: string,
+  code: string,
   name?: string,
   details?: string,
-  category?: string
+  categoryId?: string,
+  isClaimed?: boolean,
+  userId?: string
 ): Promise<{ success: boolean; message: string; qrCode?: Partial<QrCode> }> => {
+  logger.info({ code });
   try {
-    const qrCode = await QrCode.findOne({ where: { id: id } });
+    const qrCode = await QrCode.findOne({ where: { code: code } });
     if (!qrCode) return { success: false, message: "QR code not found" };
     const updatedQrCode: Partial<QrCode> = {
       ...qrCode,
       itemName: name ?? qrCode.itemName,
       itemDetails: details ?? qrCode.itemDetails,
-      itemCategoryId: category ?? qrCode.itemCategoryId,
+      itemCategoryId: categoryId ?? qrCode.itemCategoryId,
+      isClaimed: isClaimed ?? qrCode.isClaimed,
+      user_id: userId ?? qrCode.user_id,
     };
+    logger.info({ updatedQrCode });
     await QrCode.save(updatedQrCode);
     return { success: true, message: "QR code updated", qrCode: updatedQrCode };
   } catch (error) {
@@ -85,6 +91,7 @@ export const deleteQrCodeService = async (
 ): Promise<{ success: boolean; message: string }> => {
   try {
     const qrCode = await QrCode.findOne({ where: { id: id } });
+    logger.info({ qrCode });
     if (!qrCode) return { success: false, message: "QR code not found" };
     await QrCode.delete({ id: qrCode.id });
     return { success: true, message: "QR code deleted" };

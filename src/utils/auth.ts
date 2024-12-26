@@ -15,11 +15,11 @@ export const createJwt = (user: User) => {
 };
 
 export const protect = (req: any, res: Response, next: NextFunction): any => {
-  const bearer = req.headers.authorization;
-  if (!bearer) return res.sendStatus(401).json({ message: "Unauthorized" });
-
-  const [, token] = bearer.split(" ");
+  const token = req.cookies.jwt;
+  // logger.info(`Token: ${token}`);
   if (!token) return res.sendStatus(401).json({ message: "Unauthorized" });
+  // const user = jwt.verify(token, JWT_SECRET!);
+  // logger.info(`User: ${user}`);
 
   try {
     const user = jwt.verify(token, JWT_SECRET!);

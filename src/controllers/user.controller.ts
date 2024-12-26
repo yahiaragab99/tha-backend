@@ -57,7 +57,7 @@ export const logInUser = async (req: Request, res: Response): Promise<any> => {
       if (err) {
         return res.status(500).json({ message: "Error saving cookie" });
       } else {
-        logger.info("USER LOGGED IN -- ", req.session);
+        logger.info(`USER LOGGED IN -- ${req.session.userId}`);
       }
     });
     const maxAge = MAX_AGE_COOKIE;

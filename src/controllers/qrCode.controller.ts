@@ -57,14 +57,16 @@ export const getQrCodeById = async (req: Request, res: Response): Promise<any> =
 // Controller to update a QR code's details
 export const updateQrCode = async (req: Request, res: Response): Promise<any> => {
   const qrCodeId = req.params.id;
-  const { itemName, itemDetails, itemCategory } = req.body;
+  const { itemName, itemDetails, itemCategoryId, isClaimed, userId } = req.body;
   if (!qrCodeId) return res.status(400).json({ message: "QR code ID is required" });
   try {
     const { success, message, qrCode } = await updateQrCodeService(
       qrCodeId,
       itemName,
       itemDetails,
-      itemCategory
+      itemCategoryId,
+      isClaimed,
+      userId
     );
     if (!success) return res.status(404).json({ message });
     logger.info(message);
@@ -92,8 +94,9 @@ export const isQrCodeClaimed = async (req: Request, res: Response): Promise<any>
 
 // Controller to delete a QR code
 export const deleteQrCode = async (req: Request, res: Response): Promise<any> => {
-  const qrCodeId = req.params.qrCodeId;
+  const qrCodeId = req.params.id;
   if (!qrCodeId) return res.status(400).json({ message: "QR code ID is required" });
+  logger.info({ qrCodeId });
   try {
     const { success, message } = await deleteQrCodeService(qrCodeId);
     if (!success) return res.status(404).json({ message });
