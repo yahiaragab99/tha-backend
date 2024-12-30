@@ -75,11 +75,11 @@ export const updateQrCodeService = async (
 
 export const isQrCodeClaimedService = async (
   id: string
-): Promise<{ success: boolean; message: string; isClaimed?: boolean }> => {
+): Promise<{ success: boolean; message: string; qrCode?: QrCode }> => {
   try {
     const qrCode = await QrCode.findOne({ where: { id: id } });
     if (!qrCode) return { success: false, message: "QR code not found" };
-    return { success: true, message: "QR code found", isClaimed: qrCode.isClaimed };
+    return { success: true, message: "QR code found", qrCode: qrCode };
   } catch (error) {
     logger.error("Error getting QR code:", error);
     return { success: false, message: "Internal server error" };

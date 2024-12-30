@@ -82,10 +82,10 @@ export const isQrCodeClaimed = async (req: Request, res: Response): Promise<any>
   const qrCodeId = req.params.id;
   if (!qrCodeId) return res.status(400).json({ message: "QR code ID is required" });
   try {
-    const { success, message, isClaimed } = await isQrCodeClaimedService(qrCodeId);
+    const { success, message, qrCode } = await isQrCodeClaimedService(qrCodeId);
     if (!success) return res.status(404).json({ message });
     logger.info(message);
-    res.status(200).json(isClaimed);
+    res.status(200).json(qrCode);
   } catch (error) {
     console.error("Error checking QR code claim status", error);
     res.status(500).json({ message: "Internal server error" });

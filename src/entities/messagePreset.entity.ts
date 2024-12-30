@@ -12,10 +12,10 @@ export class MessagePreset extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", name: "preset_title", length: 255 })
   presetTitle: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "text", name: "preset_text" })
   presetText: string;
 
   @CreateDateColumn({ name: "created_at" })

@@ -17,13 +17,22 @@ export class Message extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column({ type: "uuid", name: "qr_code_id", nullable: false })
+  qrCodeId: string;
+
   @ManyToOne(() => QrCode)
   @JoinColumn({ name: "qr_code_id" })
   qrCode: QrCode;
 
+  @Column({ type: "uuid", name: "recipient_id", nullable: false })
+  recipientId: string;
+
   @ManyToOne(() => User)
   @JoinColumn({ name: "recipient_id" })
   recipient: User;
+
+  @Column({ type: "uuid", name: "preset_id", nullable: false })
+  presetId: string;
 
   @ManyToOne(() => MessagePreset)
   @JoinColumn({ name: "preset_id" })

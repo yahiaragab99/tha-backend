@@ -26,7 +26,7 @@ export const configureMiddleware = (app: Express) => {
   app.use(cookieParser());
   app.use(
     cors({
-      origin: [process.env.CLIENT_URI!, process.env.IOS_CLIENT_URI!],
+      origin: [process.env.CLIENT_URI!, process.env.IOS_CLIENT_URI!, process.env.CLAIM_URI!],
       methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],
       credentials: true,
     })
