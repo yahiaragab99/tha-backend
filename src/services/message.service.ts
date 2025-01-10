@@ -60,3 +60,15 @@ export const getPresetsService = async (): Promise<{
     return { success: false, message: "Internal server error" };
   }
 };
+
+export const deleteMessageService = async (
+  messageId: string
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    await Message.delete({ id: messageId });
+    return { success: true, message: "Message deleted" };
+  } catch (error) {
+    logger.error("Error deleting message:", error);
+    return { success: false, message: "Internal server error" };
+  }
+};

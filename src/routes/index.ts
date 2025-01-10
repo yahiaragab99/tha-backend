@@ -10,7 +10,7 @@ export const configureRoutes = (app: Express) => {
   app.use("/qrcode", qrCodeRouter);
   app.use("/message", messageRouter);
   app.use("/notification", notificationRouter);
-  app.use("/category", protect, categoryRouter);
+  app.use("/category", categoryRouter);
   app.use("/auth", userRouter);
 
   app.get("/", (_req, res) => {

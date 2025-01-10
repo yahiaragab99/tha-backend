@@ -2,7 +2,7 @@ import { User } from "../entities/users.entity";
 import { logger } from "../utils/logger";
 import jwt from "jsonwebtoken";
 import bucket from "../storage";
-import { comparePasswords, createJwt, hashPassword } from "../utils/auth";
+import { comparePasswords, createJwt, hashPassword, verifyJwt } from "../utils/auth";
 
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
 interface JwtPayload {
@@ -140,25 +140,28 @@ export const updateUserByIdService = async (
   }
 };
 
-export const logOutUserByIdService = async (
-  token: string
-): Promise<{ success: boolean; message: string }> => {
+export const logOutUserByIdService = async (): Promise<{ success: boolean; message: string }> => {
   try {
-    const decodedToken = jwt.decode(token) as JwtPayload;
-    if (!decodedToken) {
-      return { success: false, message: "Unauthorized" };
-    }
-
-    const userId = decodedToken.id as string;
-    if (!userId) {
-      return { success: false, message: "User ID is required" };
-    }
-
-    jwt.verify(token, JWT_SECRET!);
-
     return { success: true, message: "User logged out successfully" };
   } catch (error) {
     logger.error(`Error logging out user: ${error}`);
+    return { success: false, message: "Internal server error" };
+  }
+};
+
+export const getCurrentUserService = async (
+  token: string
+): Promise<{ success: boolean; message: string; user?: User }> => {
+  try {
+    logger.info("AUTO LOGGING IN USER");
+    const payload: any = verifyJwt(token);
+    const user = await User.findOne({ where: { id: payload.id } });
+    if (!user) {
+      return { success: false, message: "User not found" };
+    }
+    return { success: true, message: "User found", user };
+  } catch (error) {
+    logger.error(`Error getting current user: ${error}`);
     return { success: false, message: "Internal server error" };
   }
 };

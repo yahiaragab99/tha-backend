@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { JWT_COOKIE_NAME, MAX_AGE_COOKIE } from "../constants";
 import {
   createUserService,
+  getCurrentUserService,
   getUserByIdService,
   isEmailRegisteredService,
   logInUserService,
@@ -34,6 +35,7 @@ export const signUpUser = async (req: Request, res: Response, next: NextFunction
       lastName,
       phoneNumber
     );
+    logger.info({ message });
     if (!success) return res.status(409).json({ message });
     res.status(201).json({
       message,
@@ -83,7 +85,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
 
 export const updateUser = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const userId = req.params.id;
-  const newUserData = req.body;
+  const { newUserData } = req.body;
   const profilePicFile = req.file;
   if (!userId) return res.status(400).json({ message: "User ID is required" });
   try {
@@ -96,10 +98,11 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 };
 
 export const logOutUser = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  const token = req.cookies[JWT_COOKIE_NAME];
-  if (!token) return res.status(400).json({ message: "Token is missing" });
+  // const token = req.cookies[JWT_COOKIE_NAME];
+  // console.log(token);
+  // if (!token) return res.status(400).json({ message: "Token is missing" });
   try {
-    const { success, message } = await logOutUserByIdService(token);
+    const { success, message } = await logOutUserByIdService();
     if (!success) return res.status(404).json({ message });
     req.session.destroy((err) => {
       if (err) {
@@ -115,6 +118,17 @@ export const logOutUser = async (req: Request, res: Response, next: NextFunction
   }
 };
 
+export const getCurrentUser = async (req: Request, res: Response): Promise<any> => {
+  const token = req.cookies[JWT_COOKIE_NAME];
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
+  try {
+    const { success, message, user } = await getCurrentUserService(token);
+    if (!success) return res.status(404).json({ message });
+    res.status(200).json({ user });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 //TODO ADD NOTIFICATION TOKEN TO USER
 
 //TODO REMOVE NOTIFICATION TOKEN FROM USER

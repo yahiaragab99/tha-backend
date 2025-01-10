@@ -6,6 +6,7 @@ import {
   getUser,
   updateUser,
   logOutUser,
+  getCurrentUser,
 } from "../controllers/user.controller";
 import { validateSignUp } from "../middleware/validation.middleware";
 
@@ -17,6 +18,8 @@ const userRouter = express.Router();
 userRouter.post("/signup", validateSignUp, signUpUser);
 userRouter.post("/login", logInUser);
 userRouter.post("/logout", logOutUser);
+
+userRouter.get("/user/me", getCurrentUser);
 
 userRouter.put("/user/:id", updateUser);
 userRouter.get("/user/:id", getUser);

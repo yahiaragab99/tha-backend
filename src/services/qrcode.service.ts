@@ -52,9 +52,9 @@ export const updateQrCodeService = async (
   isClaimed?: boolean,
   userId?: string
 ): Promise<{ success: boolean; message: string; qrCode?: Partial<QrCode> }> => {
-  logger.info({ code });
   try {
-    const qrCode = await QrCode.findOne({ where: { code: code } });
+    const qrCode = await QrCode.findOne({ where: { id: code } });
+    logger.info({ qrCode });
     if (!qrCode) return { success: false, message: "QR code not found" };
     const updatedQrCode: Partial<QrCode> = {
       ...qrCode,

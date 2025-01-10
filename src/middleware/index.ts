@@ -1,4 +1,4 @@
-import express, { Express, Request, Response, NextFunction } from "express";
+import express, { Express } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import session from "express-session";
@@ -24,6 +24,7 @@ export const configureMiddleware = (app: Express) => {
 
   app.use(morgan("dev"));
   app.use(cookieParser());
+  // app.use(cors());
   app.use(
     cors({
       origin: [process.env.CLIENT_URI!, process.env.IOS_CLIENT_URI!, process.env.CLAIM_URI!],

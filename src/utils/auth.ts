@@ -38,3 +38,7 @@ export const comparePasswords = (password: string, hashedPassword: string) => {
 export const hashPassword = (password: string) => {
   return bcrypt.hash(password, 10);
 };
+
+export const verifyJwt = (token: string) => {
+  return jwt.verify(token, JWT_SECRET!);
+};

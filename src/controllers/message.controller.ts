@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   addMessageService,
+  deleteMessageService,
   getPresetsService,
   getUserMessagesService,
 } from "../services/message.service";
@@ -43,5 +44,15 @@ export const getMessagePresets = async (req: Request, res: Response): Promise<an
     if (!success) return res.status(404).json({ message });
     logger.info(message);
     return res.status(200).json({ message, items });
+  } catch (error) {}
+};
+
+export const deleteMessage = async (req: Request, res: Response): Promise<any> => {
+  const messageId = req.params.id;
+  if (!messageId) return res.status(400).json({ message: "Message ID is required" });
+  try {
+    const { success, message } = await deleteMessageService(messageId);
+    if (!success) return res.status(404).json({ message });
+    return res.status(200).json({ message });
   } catch (error) {}
 };
