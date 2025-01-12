@@ -28,7 +28,7 @@ export const signUpUser = async (req: Request, res: Response, next: NextFunction
   if (!email || !password || !firstName || !lastName || !phoneNumber)
     return res.status(400).json({ message: "All fields are required" });
   try {
-    const { success, message, token } = await createUserService(
+    const { success, message, token, user } = await createUserService(
       email,
       password,
       firstName,
@@ -39,6 +39,7 @@ export const signUpUser = async (req: Request, res: Response, next: NextFunction
     if (!success) return res.status(409).json({ message });
     res.status(201).json({
       message,
+      user,
       token,
     });
   } catch (error) {
@@ -98,9 +99,6 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 };
 
 export const logOutUser = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  // const token = req.cookies[JWT_COOKIE_NAME];
-  // console.log(token);
-  // if (!token) return res.status(400).json({ message: "Token is missing" });
   try {
     const { success, message } = await logOutUserByIdService();
     if (!success) return res.status(404).json({ message });

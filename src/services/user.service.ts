@@ -26,7 +26,7 @@ export const createUserService = async (
   firstName: string,
   lastName: string,
   phoneNumber: string
-): Promise<{ success: boolean; message: string; token?: string }> => {
+): Promise<{ success: boolean; message: string; token?: string; user?: User }> => {
   try {
     const existingUser = await isEmailRegisteredService(email);
     if (existingUser) return { success: false, message: "Email already exists" };
@@ -39,12 +39,12 @@ export const createUserService = async (
       phoneNumber,
     });
     await newUser.save();
-    logger.info(`New user created: ${newUser}`);
+    // logger.info(`New user created: ${newUser}`);
     if (!JWT_SECRET) {
       return { success: false, message: "Internal server error" };
     }
     const token = createJwt(newUser);
-    return { success: true, message: "User created successfully", token };
+    return { success: true, message: "User created successfully", token, user: newUser };
   } catch (err) {
     return { success: false, message: "Internal server error" };
   }

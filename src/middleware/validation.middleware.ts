@@ -16,3 +16,5 @@ export const validateSignUp = (req: Request, res: Response, next: NextFunction) 
   }
   next();
 };
+
+// TODO add validations for all post and put requests
