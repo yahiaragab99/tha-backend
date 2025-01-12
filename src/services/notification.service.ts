@@ -25,6 +25,7 @@ export const getUserNotificationsService = async (
         "notification.createdAt as createdAt",
         "notification.deletedAt as deletedAt",
         "message.message as message",
+        "message.senderPhoneNumber as senderPhoneNumber",
         "notificationType.id as notificationTypeId",
         "notificationType.title as notificationTypeTitle",
         "notificationType.description as notificationTypeDescription",
