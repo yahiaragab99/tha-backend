@@ -10,5 +10,5 @@ export const AppDataSource = new DataSource({
     rejectUnauthorized: false,
   },
   entities: ["./src/entities/*.ts"],
-  //   migrations: ["./src/migrations/*.ts"],
+  migrations: ["./src/migrations/*.ts"],
 });

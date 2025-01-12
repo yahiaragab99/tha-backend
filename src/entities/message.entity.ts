@@ -41,6 +41,9 @@ export class Message extends BaseEntity {
   @Column({ type: "text" })
   message: string;
 
+  @Column({ type: "varchar", name: "sender_phone_number" })
+  senderPhoneNumber: string;
+
   @Column({ type: "boolean", name: "is_preset", default: false })
   isPreset: boolean;
 

@@ -24,14 +24,16 @@ export const sendMessage = async (req: Request, res: Response): Promise<any> => 
   const messageBody = req.body.message;
   const presetId = req.body.presetId;
   const qrCodeId = req.body.qrCodeId;
-  if (!recipientId || !messageBody || !qrCodeId)
+  const senderPhoneNumber = req.body.senderPhoneNumber;
+  if (!recipientId || !messageBody || !qrCodeId || !senderPhoneNumber)
     return res.status(400).json({ message: "Missing required fields" });
   try {
     const { success, message, messageId } = await addMessageService(
       recipientId,
       qrCodeId,
       presetId,
-      messageBody
+      messageBody,
+      senderPhoneNumber
     );
     if (!success) return res.status(404).json({ message });
     return res.status(200).json({ message, messageId });

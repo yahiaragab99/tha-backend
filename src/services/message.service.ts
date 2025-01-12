@@ -22,13 +22,15 @@ export const addMessageService = async (
   recipientId: string,
   qrCodeId: string,
   presetId: string,
-  message: string
+  message: string,
+  senderPhoneNumber?: string
 ): Promise<{ success: boolean; message: string; messageId?: string }> => {
   try {
     const newMessage = Message.create({
       recipientId: recipientId,
       qrCodeId: qrCodeId,
       message: message,
+      senderPhoneNumber: senderPhoneNumber,
       presetId: presetId,
       isPreset: !!presetId,
     });
